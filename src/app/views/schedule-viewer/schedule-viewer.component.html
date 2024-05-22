@@ -1,0 +1,59 @@
+<ng-container>
+  <div class="canvas">
+    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
+    <ng-container *ngTemplateOutlet="qrs && qrs[index] ? qr : undefined"></ng-container>
+    <ng-container *ngTemplateOutlet="bottom_section"></ng-container>
+  </div>
+</ng-container>
+
+<ng-template #info>
+  <div class="info-wrapper" *transloco="let t">
+    <div class="info-row">
+      <div class="info-element">
+        <span class="title">Company</span>
+        <span class="data">{{ currentAppointments[index]?.organizationId }}</span>
+      </div>
+      <div class="info-element">
+        <span class="title">Name</span>
+        <span class="data">{{ [sessionService.getUser().uuid] | userNameList: [sessionService.getUser()] }}</span>
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-element">
+        <span class="title">Date</span>
+        <span class="data">{{ currentAppointments[index].startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
+      </div>
+      <div class="info-element">
+        <span class="title">Address</span>
+        <span class="data">221B Baker Street</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #qr>
+  <div class="qr-wrapper" *transloco="let t">
+    <img src="{{qrs[index].base64}}">
+    <span>Show your QR code from your smartphone screen to access to activities.</span>
+  </div>
+</ng-template>
+
+<ng-template #bottom_section>
+  <div class="bottom-wrapper" *transloco="let t">
+    <button *ngIf="currentAppointments[index-1]"
+            class="nav left"
+            (click)="index = index-1"
+    >
+      <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
+    </button>
+    <button class="join" disabled>
+      {{t('t.join_to')}} {{currentAppointments[index]?.title}}
+    </button>
+    <button *ngIf="currentAppointments[index+1]"
+            class="nav right"
+            (click)="index = index+1"
+    >
+      <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
+    </button>
+  </div>
+</ng-template>

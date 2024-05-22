@@ -1,0 +1,13 @@
+<div id="navbar">
+  <div class="left">
+    <biit-nav-menu [routes]="routes"
+    ></biit-nav-menu>
+  </div>
+  <div class="right">
+    <biit-nav-user *ngIf="user"
+                   [title]="user?.name + ' ' + user?.lastname"
+                   [subtitle]="'Boarding Pass'"
+                   (click)="router.navigateByUrl('/login?logout')"
+    ></biit-nav-user>
+  </div>
+</div>

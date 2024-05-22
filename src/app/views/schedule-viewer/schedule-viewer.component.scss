@@ -1,0 +1,124 @@
+$qr-width: 70%;
+$accent-color: #B49057;
+$disabled-bg: #D9D9D9;
+$disabled-text: #B9B9B9;
+
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.canvas {
+  width: 450px;
+  height: fit-content;
+  min-height: 100%;
+  margin: 0 auto;
+  background: #F0EEED;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.5rem;
+
+  .info-row {
+    display: flex;
+    gap: 1rem;
+
+    &:not(:first-child) {
+      margin-top: 0.75rem;
+    }
+
+    .info-element {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      .title {
+        font-family: "Sofia Sans Extra Condensed", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        line-height: 120%;
+      }
+
+      .data {
+        font-family: "Arial", sans-serif;
+        font-size: 0.75rem;
+        min-height: 1.75rem;
+        line-height: 120%;
+      }
+    }
+  }
+
+  .qr-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+
+    img {
+      width: $qr-width;
+    }
+
+    span {
+      width: $qr-width;
+      font-family: "Arial", sans-serif;
+      font-size: 0.75rem;
+      line-height: 120%;
+    }
+  }
+
+  .bottom-wrapper {
+    width: 100%;
+    position: relative;
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+
+    button {
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+
+      &.join {
+        font-size: 1.25rem;
+        font-family: "Sofia Sans Extra Condensed", sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: black;
+        padding: 0.75rem 2rem;
+        background: $accent-color;
+        border-radius: 0.75rem;
+
+        &:disabled {
+          background: $disabled-bg;
+          color: $disabled-text;
+        }
+      }
+
+      &.nav {
+        height: 100%;
+        width: 1rem;
+        position: absolute;
+
+        &.left {
+          left: 0;
+        }
+        &.right {
+          right: 0;
+          rotate: 180deg;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 450px) {
+  .canvas {
+    width: 100%;
+  }
+}
