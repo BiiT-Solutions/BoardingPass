@@ -28,7 +28,7 @@
     "biit-icons-collection": "latest",
     "biit-ui": "latest",
     "infographic-engine-lib": "latest",
-    "ngx-scanner-qrcode": "^1.6.6",
+    "ngx-scanner-qrcode": "1.6.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "user-manager-structure-lib": "latest",
