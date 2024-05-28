@@ -1,3 +1,13 @@
 {
-  "join_to": "Join"
+  "company": "Company",
+  "name": "Name",
+  "date": "Date",
+  "address": "Address",
+  "planning": "Planning",
+  "join_to": "Join",
+  "go_back": "Go Back",
+  "label_no_activities_today": "You have no planned activities for today",
+  "label_next_activity": "Your next activity is planned on",
+  "label_no_next_activity": "You have no further activities planned",
+  "label_show_qr": "Show your QR code from your smartphone screen to access to activities."
 }
