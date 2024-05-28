@@ -6,12 +6,19 @@ import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-u
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoginRequest, User} from "authorization-services-lib";
-import {AuthService as AppointmentCenterAuthService, SessionService as AppointmentCenterSessionService} from 'appointment-center-structure-lib';
+import {
+  AuthService as AppointmentCenterAuthService,
+  SessionService as AppointmentCenterSessionService
+} from 'appointment-center-structure-lib';
 import {
   AuthService as UserManagerAuthService,
   SessionService as UserManagerSessionService,
   OrganizationService
 } from 'user-manager-structure-lib';
+import {
+  AuthService as InfographicAuthService,
+  SessionService as InfographicSessionService
+} from 'infographic-engine-lib';
 import {combineLatest} from "rxjs";
 import {PermissionService} from "../../services/permission.service";
 import {Permission} from "../../config/rbac/permission";
@@ -36,6 +43,8 @@ export class BiitLoginPageComponent implements OnInit {
               private appointmentCenterSessionService: AppointmentCenterSessionService,
               private userManagerAuthService: UserManagerAuthService,
               private userManagerSessionService: UserManagerSessionService,
+              private infographicAuthService: InfographicAuthService,
+              private infographicSessionService: InfographicSessionService,
               private organizationService: OrganizationService,
               private permissionService: PermissionService,
               private biitSnackbarService: BiitSnackbarService,
@@ -64,10 +73,11 @@ export class BiitLoginPageComponent implements OnInit {
     combineLatest(
       [
         this.appointmentCenterAuthService.login(new LoginRequest(login.username, login.password)),
-        this.userManagerAuthService.login(new LoginRequest(login.username, login.password))
+        this.userManagerAuthService.login(new LoginRequest(login.username, login.password)),
+        this.infographicAuthService.login(new LoginRequest(login.username, login.password))
       ]
     ).subscribe({
-      next: ([appointmentCenterResponse, userManagerResponse]) => {
+      next: ([appointmentCenterResponse, userManagerResponse, infographicResponse]) => {
         const user: User = User.clone(appointmentCenterResponse.body);
         if (!this.canAccess(user)) {
           this.waiting = false;
@@ -87,6 +97,11 @@ export class BiitLoginPageComponent implements OnInit {
         const userManagerExpiration: number = +userManagerResponse.headers.get(Constants.HEADERS.EXPIRES);
         this.userManagerSessionService.setToken(userManagerToken, userManagerExpiration, login.remember, true);
         this.userManagerSessionService.setUser(user);
+
+        const infographicToken: string = infographicResponse.headers.get(Constants.HEADERS.AUTHORIZATION_RESPONSE);
+        const infographicExpiration: number = +infographicResponse.headers.get(Constants.HEADERS.EXPIRES);
+        this.infographicSessionService.setToken(infographicToken, infographicExpiration, login.remember, true);
+        this.infographicSessionService.setUser(user);
 
         this.organizationService.getAllByUser(user.id).subscribe(orgs => {
           if (orgs[0] !== undefined) {

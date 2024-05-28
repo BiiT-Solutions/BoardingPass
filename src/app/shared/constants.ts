@@ -16,6 +16,7 @@ export class Constants {
     public static readonly AUTHORIZATION: string = 'Authorization';
     public static readonly AUTHORIZATION_RESPONSE: string = 'authorization';
     public static readonly EXPIRES: string = 'expires';
+    public static readonly TIMEZONE: string = 'X-Time-Zone';
   }
 
   public static readonly PASSWORDS = class {

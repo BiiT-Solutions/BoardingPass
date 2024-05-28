@@ -1,0 +1,22 @@
+:host {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+}
+
+ngx-scanner-qrcode {
+  min-height: 100%;
+  min-width: 100%;
+  height: auto;
+  width: auto;
+
+  ::ng-deep video {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+  }
+
+  ::ng-deep canvas, ::ng-deep div {
+    display: none;
+  }
+}

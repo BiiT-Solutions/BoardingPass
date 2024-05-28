@@ -1,31 +1,66 @@
 <ng-container>
-  <div class="canvas">
+  <div class="canvas" *ngIf="view == 'browse'">
+    <ng-container *ngTemplateOutlet="!currentAppointments || !currentAppointments.length ? no_activities : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
-    <ng-container *ngTemplateOutlet="qrs && qrs[index] ? qr : undefined"></ng-container>
-    <ng-container *ngTemplateOutlet="bottom_section"></ng-container>
+    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments.length > 1 ? roadmap : undefined"></ng-container>
+    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? qr : undefined"></ng-container>
+    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? bottom_section : undefined"></ng-container>
   </div>
+
+    <ng-container *ngTemplateOutlet="graph" [style.opacity]="view == 'graph' ? 1 : 0"></ng-container>
 </ng-container>
+
+<ng-template #no_activities>
+  <div class="no-activities-wrapper" *transloco="let t">
+    <span class="title">{{t('t.label_no_activities_today')}}</span>
+    <span *ngIf="nextAppointment" class="data">{{t('t.label_next_activity')}} {{ nextAppointment.startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
+    <span *ngIf="!nextAppointment" class="data">{{t('t.label_no_next_activity')}}</span>
+  </div>
+</ng-template>
 
 <ng-template #info>
   <div class="info-wrapper" *transloco="let t">
     <div class="info-row">
       <div class="info-element">
-        <span class="title">Company</span>
+        <span class="title">{{ t('t.company') }}</span>
         <span class="data">{{ currentAppointments[index]?.organizationId }}</span>
       </div>
       <div class="info-element">
-        <span class="title">Name</span>
+        <span class="title">{{ t('t.name') }}</span>
         <span class="data">{{ [sessionService.getUser().uuid] | userNameList: [sessionService.getUser()] }}</span>
       </div>
     </div>
     <div class="info-row">
       <div class="info-element">
-        <span class="title">Date</span>
+        <span class="title">{{ t('t.date') }}</span>
         <span class="data">{{ currentAppointments[index].startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
       </div>
       <div class="info-element">
-        <span class="title">Address</span>
+        <span class="title">{{ t('t.address') }}</span>
         <span class="data">221B Baker Street</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #roadmap>
+  <div class="roadmap-wrapper" *transloco="let t">
+    <span class="title">{{t('t.planning')}}</span>
+    <div class="course-roadmap">
+      <div *ngFor="let appointment of currentAppointments; let i = index"
+           class="roadmap-section"
+           [class.selected]="i == index"
+           [class.colored]="appointment.attended"
+      >
+        <div class="circle"
+        ></div>
+        <div class="roadmap-line"></div>
+      </div>
+    </div>
+    <div class="course-list">
+      <div class="course-info" *ngFor="let appointment of currentAppointments">
+        <span class="title">{{appointment.title}}</span>
+        <span class="data">{{ appointment.startTime | translocoDate: {timeStyle: 'short'} }}</span>
       </div>
     </div>
   </div>
@@ -33,8 +68,8 @@
 
 <ng-template #qr>
   <div class="qr-wrapper" *transloco="let t">
-    <img src="{{qrs[index].base64}}">
-    <span>Show your QR code from your smartphone screen to access to activities.</span>
+    <img src="{{currentAppointments[index].qr?.base64}}">
+    <span>{{t('t.label_show_qr')}}</span>
   </div>
 </ng-template>
 
@@ -46,7 +81,10 @@
     >
       <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
     </button>
-    <button class="join" disabled>
+    <button class="join"
+            [disabled]="!currentAppointments[index].attended"
+            (click)="loadGraph()"
+    >
       {{t('t.join_to')}} {{currentAppointments[index]?.title}}
     </button>
     <button *ngIf="currentAppointments[index+1]"
@@ -54,6 +92,17 @@
             (click)="index = index+1"
     >
       <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #graph>
+  <div class="graph-wrapper" [class.hide]="!graphDiv.innerHTML" *transloco="let t">
+    <div #graphDiv id="graphSvg"></div>
+    <button class="join"
+            (click)="graphDiv.innerHTML = ''; view = 'browse'"
+    >
+      {{t('t.go_back')}}
     </button>
   </div>
 </ng-template>

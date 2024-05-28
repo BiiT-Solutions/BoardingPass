@@ -9,6 +9,7 @@ import {AppointmentCenterStructureRootService, SessionService} from "appointment
 import {UserManagerRootService} from "user-manager-structure-lib";
 import {PermissionService} from "./services/permission.service";
 import {User} from "authorization-services-lib";
+import {InfographicEngineRootService} from "infographic-engine-lib";
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent {
   protected menu: Route[]= [];
   constructor(appointmentCenterStructureRootService: AppointmentCenterStructureRootService,
               userManagerRootService: UserManagerRootService,
+              infographicRootService: InfographicEngineRootService,
               biitSnackbarService: BiitSnackbarService,
               biitIconService: BiitIconService,
               protected sessionService: SessionService,
@@ -35,6 +37,7 @@ export class AppComponent {
     this.setLanguage();
     appointmentCenterStructureRootService.serverUrl = new URL(`${Environment.ROOT_URL}${Environment.APPOINTMENT_CENTER_PATH}`);
     userManagerRootService.serverUrl = new URL(`${Environment.ROOT_URL}${Environment.USER_MANAGER_PATH}`);
+    infographicRootService.serverUrl = new URL(`${Environment.ROOT_URL}${Environment.INFOGRAPHIC_ENGINE_PATH}`);
     biitSnackbarService.setPosition(BiitSnackbarVerticalPosition.TOP, BiitSnackbarHorizontalPosition.CENTER);
     biitIconService.registerIcons(completeIconSet);
     this.setPermissions();

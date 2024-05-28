@@ -1,4 +1,5 @@
 $qr-width: 70%;
+$bg-color: #F0EEED;
 $accent-color: #B49057;
 $disabled-bg: #D9D9D9;
 $disabled-text: #B9B9B9;
@@ -14,11 +15,32 @@ $disabled-text: #B9B9B9;
   height: fit-content;
   min-height: 100%;
   margin: 0 auto;
-  background: #F0EEED;
+  background: $bg-color;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
   gap: 1.5rem;
+
+  .no-activities-wrapper {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    .title {
+      font-family: "Sofia Sans Extra Condensed", sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      line-height: 120%;
+    }
+
+    .data {
+      font-family: "Arial", sans-serif;
+      font-size: 0.75rem;
+      min-height: 1.75rem;
+      line-height: 120%;
+    }
+  }
 
   .info-row {
     display: flex;
@@ -49,6 +71,101 @@ $disabled-text: #B9B9B9;
     }
   }
 
+  .roadmap-wrapper {
+    width: calc(100% + 2rem);
+    margin-left: -1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+
+    .title {
+      font-family: "Sofia Sans Extra Condensed", sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      line-height: 120%;
+    }
+
+    .course-roadmap {
+      display: flex;
+      height: 2rem;
+      align-items: center;
+      justify-content: center;
+
+      .roadmap-section {
+        position: relative;
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+
+        .circle {
+          position: relative;
+          z-index: 1;
+          height: 1.25rem;
+          width: 1.25rem;
+          background: $bg-color;
+          border: 0.37rem solid $disabled-text;
+          border-radius: 50%;
+        }
+
+        &:not(:first-child) .roadmap-line {
+          position: absolute;
+          height: 0.25rem;
+          width: 100%;
+          background: $disabled-text;
+          right: 50%;
+        }
+
+        &.selected {
+          .circle {
+            height: 2rem;
+            width: 2rem;
+          }
+        }
+
+        &.colored {
+          .circle {
+            border-color: $accent-color;
+          }
+        }
+
+        &.completed {
+          .circle {
+            background: $accent-color;
+          }
+        }
+      }
+    }
+
+    .course-list {
+      display: flex;
+      flex-grow: 1;
+
+      .course-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .title {
+          font-family: "Sofia Sans Extra Condensed", sans-serif;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 100%;
+        }
+
+        .data {
+          font-family: "Arial", sans-serif;
+          font-size: 0.75rem;
+          min-height: 1.75rem;
+        }
+      }
+    }
+  }
+
   .qr-wrapper {
     width: 100%;
     display: flex;
@@ -74,45 +191,58 @@ $disabled-text: #B9B9B9;
     margin-top: 0.5rem;
     display: flex;
     justify-content: center;
+  }
+}
 
-    button {
-      background: none;
-      color: inherit;
-      border: none;
-      padding: 0;
-      font: inherit;
-      cursor: pointer;
-      outline: inherit;
+.graph-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
 
-      &.join {
-        font-size: 1.25rem;
-        font-family: "Sofia Sans Extra Condensed", sans-serif;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: black;
-        padding: 0.75rem 2rem;
-        background: $accent-color;
-        border-radius: 0.75rem;
+  &.hide {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+}
 
-        &:disabled {
-          background: $disabled-bg;
-          color: $disabled-text;
-        }
-      }
+button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 
-      &.nav {
-        height: 100%;
-        width: 1rem;
-        position: absolute;
+  &.join {
+    font-size: 1.25rem;
+    font-family: "Sofia Sans Extra Condensed", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: black;
+    padding: 0.75rem 2rem;
+    background: $accent-color;
+    border-radius: 0.75rem;
 
-        &.left {
-          left: 0;
-        }
-        &.right {
-          right: 0;
-          rotate: 180deg;
-        }
-      }
+    &:disabled {
+      background: $disabled-bg;
+      color: $disabled-text;
+    }
+  }
+
+  &.nav {
+    height: 100%;
+    width: 1rem;
+    position: absolute;
+
+    &.left {
+      left: 0;
+    }
+    &.right {
+      right: 0;
+      rotate: 180deg;
     }
   }
 }

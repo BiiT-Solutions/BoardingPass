@@ -1,3 +1,13 @@
 {
-  "join_to": "Unirse a"
+  "company": "Empresa",
+  "name": "Nombre",
+  "date": "Fecha",
+  "address": "Dirección",
+  "planning": "Programa",
+  "join_to": "Unirse a",
+  "go_back": "Volver",
+  "label_no_activities_today": "No hay actividades programadas para hoy",
+  "label_next_activity": "Tu próxima actividad está programada el",
+  "label_no_next_activity": "No tienes más actividades programadas",
+  "label_show_qr": "Muestra tu código QR desde tu teléfono móvil para acceder a las actividades."
 }

@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
+import {NgxScannerQrcodeComponent} from "ngx-scanner-qrcode";
 
 @Component({
   selector: 'scanner',
@@ -13,8 +14,14 @@ import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
     }
   ]
 })
-export class ScannerComponent {
+export class ScannerComponent implements AfterViewInit {
+
+  @ViewChild('action') scanner: NgxScannerQrcodeComponent;
 
   constructor(private translocoService: TranslocoService) {
+  }
+
+  ngAfterViewInit() {
+    this.scanner.start();
   }
 }
