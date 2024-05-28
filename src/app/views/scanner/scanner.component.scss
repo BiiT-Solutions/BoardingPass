@@ -20,3 +20,18 @@ ngx-scanner-qrcode {
     display: none;
   }
 }
+
+.overlay {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+
+  &.success {
+    background: #57A87F99;
+  }
+
+  &.error {
+    background: #A1093F99;
+  }
+}
