@@ -30,8 +30,12 @@ export class ScannerComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log(this.scanner.devices)
-    this.scanner.start();
+    const playDeviceFacingBack = (devices: any[]) => {
+      const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
+      this.scanner.playDevice(device.deviceId);
+    }
+
+    this.scanner.start(playDeviceFacingBack);
   }
 
   protected scanQr(result: ScannerQRCodeResult[]) {
@@ -83,6 +87,6 @@ export class ScannerComponent implements AfterViewInit {
   protected switchCamera() {
     this.scanner.devices.subscribe((value) => {
       this.scanner.playDevice(value[this.scanner.deviceIndexActive+1] ? value[this.scanner.deviceIndexActive+1].deviceId : value[0].deviceId);
-    })
+    });
   }
 }
