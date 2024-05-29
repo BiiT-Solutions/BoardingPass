@@ -1,9 +1,17 @@
-<div class="overlay"
-     [class.success]="success"
-     [class.error]="error"
->
+<biit-progress-bar *ngIf="loading" [type]="BiitProgressBarType.INDETERMINATE"></biit-progress-bar>
 
+<div class="overlay" *transloco="let t">
+  <span class="label-place-inside">{{t('t.place_inside')}}</span>
+  <div class="window"
+       [class.success]="success"
+       [class.error]="error"></div>
+  <span *ngIf="loading" class="label-result" style="font-size: 3vmin">{{t('t.please_wait')}}</span>
+  <span *ngIf="success" class="label-result">{{t('t.welcome')}}</span>
+  <span *ngIf="error" class="label-result">{{t('t.try_again')}}</span>
 </div>
+
+<img src="/assets/switch-camera.png" style="width: 50px; height: 50px; position: absolute; top: 10px; right: 10px; z-index: 2; filter: invert(); cursor: pointer"
+     (click)="switchCamera()">
 
 <ngx-scanner-qrcode #action="scanner"
                     (event)="scanQr($event)"

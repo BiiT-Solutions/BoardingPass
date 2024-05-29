@@ -4,6 +4,12 @@
   overflow: hidden;
 }
 
+biit-progress-bar {
+  position: absolute;
+  width: 100%;
+  z-index: 2;
+}
+
 ngx-scanner-qrcode {
   min-height: 100%;
   min-width: 100%;
@@ -22,16 +28,51 @@ ngx-scanner-qrcode {
 }
 
 .overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   height: 100%;
   width: 100%;
   z-index: 1;
+  overflow: hidden;
 
-  &.success {
-    background: #57A87F99;
+  .window {
+    height: 55vmin;
+    width: 55vmin;
+    border: 3px solid #222222;
+    box-shadow: 0 0 0 100vh #22222299;
+    border-radius: 5px;
+
+    &.success {
+      border: 3px solid #57A87F;
+      box-shadow: 0 0 0 100vh #57A87F99;
+    }
+
+    &.error {
+      border: 3px solid #A1093F;
+      box-shadow: 0 0 0 100vh #A1093F99;
+    }
   }
 
-  &.error {
-    background: #A1093F99;
+  .label-place-inside {
+    position: absolute;
+    font-size: 3.5vmin;
+    font-weight: 600;
+    bottom: calc(50% + 29vmin);
+    color: white;
+    width: 55vmin;
+    text-align: center;
+  }
+
+  .label-result {
+    position: absolute;
+    font-size: 4.2vmin;
+    font-weight: 600;
+    top: calc(50% + 30.5vmin);
+    color: white;
+    width: 55vmin;
+    text-align: center;
+    text-transform: uppercase;
   }
 }
