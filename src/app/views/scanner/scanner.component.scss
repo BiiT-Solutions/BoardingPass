@@ -8,6 +8,11 @@ biit-progress-bar {
   position: absolute;
   width: 100%;
   z-index: 2;
+
+  &.progress {
+    bottom: 0.25rem;
+    transition: 0.1s all ease-in-out;
+  }
 }
 
 ngx-scanner-qrcode {
@@ -74,5 +79,26 @@ ngx-scanner-qrcode {
     width: 55vmin;
     text-align: center;
     text-transform: uppercase;
+  }
+}
+
+.label-bottom {
+  position: absolute;
+  bottom: 0.5rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: min(4vmin, 1.5rem);
+  z-index: 2;
+  transition: 0.1s all ease-in-out;
+
+  &.left {
+    left: 0.5rem;
+    max-width: 75%;
+  }
+
+  &.right {
+    right: 0.5rem;
+    text-align: right;
   }
 }

@@ -16,3 +16,8 @@
 <ngx-scanner-qrcode #action="scanner"
                     (event)="scanQr($event)"
 ></ngx-scanner-qrcode>
+
+<span class="label-bottom left" [style.opacity]="!checkedAttendees ? 0 : 1">{{title}}</span>
+<span class="label-bottom right" [style.opacity]="!checkedAttendees ? 0 : 1">{{checkedAttendees}} / {{totalAttendees}}</span>
+<biit-progress-bar [type]="BiitProgressBarType.DETERMINATE" [value]="(100/totalAttendees) * checkedAttendees" class="progress"
+                   [style.opacity]="!checkedAttendees ? 0 : 1"></biit-progress-bar>

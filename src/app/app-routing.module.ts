@@ -19,6 +19,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'schedule-list',
+    loadChildren: () => import('./views/schedule-list/schedule-list.module').then(m => m.ScheduleListModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'scanner',
     loadChildren: () => import('./views/scanner/scanner.module').then(m => m.ScannerModule),
     canActivate: [AuthGuard]

@@ -4,12 +4,6 @@ $accent-color: #B49057;
 $disabled-bg: #D9D9D9;
 $disabled-text: #B9B9B9;
 
-biit-progress-bar {
-  position: absolute;
-  width: 100%;
-  z-index: 2;
-}
-
 :host {
   display: flex;
   height: 100%;
@@ -46,6 +40,42 @@ biit-progress-bar {
       font-size: 0.75rem;
       min-height: 1.75rem;
       line-height: 120%;
+    }
+  }
+
+  .events-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .event-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.75rem 1.5rem;
+      background: white;
+
+      .title {
+        font-size: 0.75rem;
+        line-height: 100%;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .date {
+        font-size: 0.75rem;
+        line-height: 120%;
+      }
+
+      button {
+        margin-top: 0.5rem;
+        width: 100%;
+        font-size: 0.75rem;
+
+        ::ng-deep .button-base, ::ng-deep .button-content {
+          width: 100%;
+        }
+      }
     }
   }
 
@@ -115,7 +145,6 @@ biit-progress-bar {
           background: $bg-color;
           border: 0.37rem solid $disabled-text;
           border-radius: 50%;
-          transition: 0.1s all ease-in-out;
         }
 
         &:not(:first-child) .roadmap-line {
@@ -207,7 +236,6 @@ biit-progress-bar {
   align-items: center;
   width: 100%;
   flex-direction: column;
-  transition: 0.2s all ease-in-out;
 
   &.hide {
     width: 0;
@@ -224,8 +252,6 @@ button {
   font: inherit;
   cursor: pointer;
   outline: inherit;
-
-  transition: 0.1s all ease-in-out;
 
   &.join {
     font-size: 1.25rem;
@@ -254,10 +280,6 @@ button {
     &.right {
       right: 0;
       rotate: 180deg;
-    }
-
-    &:disabled {
-      pointer-events: none;
     }
   }
 }

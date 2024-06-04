@@ -1,5 +1,7 @@
 <ng-container>
-  <div class="canvas" *ngIf="view == 'browse'">
+  <biit-progress-bar [type]="BiitProgressBarType.INDETERMINATE" *ngIf="loading"></biit-progress-bar>
+
+  <div class="canvas" *ngIf="!graphSvg || graphSvg == 'empty'" [style.opacity]="loading ? 0 : 1">
     <ng-container *ngTemplateOutlet="!currentAppointments || !currentAppointments.length ? no_activities : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments.length > 1 ? roadmap : undefined"></ng-container>
@@ -7,7 +9,7 @@
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? bottom_section : undefined"></ng-container>
   </div>
 
-    <ng-container *ngTemplateOutlet="graph" [style.opacity]="view == 'graph' ? 1 : 0"></ng-container>
+  <ng-container *ngTemplateOutlet="graph"></ng-container>
 </ng-container>
 
 <ng-template #no_activities>
@@ -75,8 +77,9 @@
 
 <ng-template #bottom_section>
   <div class="bottom-wrapper" *transloco="let t">
-    <button *ngIf="currentAppointments[index-1]"
-            class="nav left"
+    <button class="nav left"
+            [disabled]="!currentAppointments[index-1]"
+            [style.opacity]="currentAppointments[index-1] ? 1 : 0"
             (click)="index = index-1"
     >
       <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
@@ -87,8 +90,9 @@
     >
       {{t('t.join_to')}} {{currentAppointments[index]?.title}}
     </button>
-    <button *ngIf="currentAppointments[index+1]"
-            class="nav right"
+    <button class="nav right"
+            [disabled]="!currentAppointments[index+1]"
+            [style.opacity]="currentAppointments[index+1] ? 1 : 0"
             (click)="index = index+1"
     >
       <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
@@ -97,10 +101,10 @@
 </ng-template>
 
 <ng-template #graph>
-  <div class="graph-wrapper" [class.hide]="!graphDiv.innerHTML" *transloco="let t">
+  <div class="graph-wrapper" [style.opacity]="loading ? 0 : 1" [class.hide]="!graphDiv.innerHTML || graphDiv.innerHTML == 'empty'" *transloco="let t">
     <div #graphDiv id="graphSvg"></div>
     <button class="join"
-            (click)="graphDiv.innerHTML = ''; view = 'browse'"
+            (click)="graphDiv.innerHTML = 'empty'"
     >
       {{t('t.go_back')}}
     </button>
