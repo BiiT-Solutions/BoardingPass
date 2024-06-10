@@ -29,6 +29,7 @@ export class ScannerComponent implements OnInit, AfterViewInit {
   protected title: string = "";
   protected totalAttendees: number;
   protected checkedAttendees: number;
+  protected multiCam = false;
 
   protected readonly BiitProgressBarType = BiitProgressBarType;
 
@@ -64,6 +65,9 @@ export class ScannerComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     const playDeviceFacingBack = (devices: any[]) => {
+      if (devices.length > 1) {
+        this.multiCam = true;
+      }
       const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
       this.scanner.playDevice(device.deviceId);
     }

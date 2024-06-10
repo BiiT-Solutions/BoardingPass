@@ -10,7 +10,10 @@
   <span *ngIf="error" class="label-result">{{t('t.try_again')}}</span>
 </div>
 
-<biit-icon name="swap" [pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"></biit-icon>
+<biit-icon *ngIf="multiCam"
+           name="swap"
+           pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"
+></biit-icon>
 
 
 <ngx-scanner-qrcode #action="scanner"
