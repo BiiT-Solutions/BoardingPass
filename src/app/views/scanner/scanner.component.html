@@ -10,8 +10,8 @@
   <span *ngIf="error" class="label-result">{{t('t.try_again')}}</span>
 </div>
 
-<img src="/assets/switch-camera.png" style="width: 50px; height: 50px; position: absolute; top: 10px; right: 10px; z-index: 2; filter: invert(); cursor: pointer"
-     (click)="switchCamera()">
+<biit-icon name="swap" [pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"></biit-icon>
+
 
 <ngx-scanner-qrcode #action="scanner"
                     (event)="scanQr($event)"
