@@ -103,7 +103,7 @@ export class BiitLoginPageComponent implements OnInit {
         this.infographicSessionService.setToken(infographicToken, infographicExpiration, login.remember, true);
         this.infographicSessionService.setUser(user);
 
-        this.organizationService.getAllByUser(user.id).subscribe({
+        this.organizationService.getAllByLoggedUser().subscribe({
           next: (orgs: Organization[]) => {
             if (orgs[0] !== undefined) {
               sessionStorage.setItem('organization', orgs[0].id);
@@ -111,7 +111,6 @@ export class BiitLoginPageComponent implements OnInit {
           },
           error: (response: HttpResponse<void>) => {
             const error: string = response.status.toString();
-            // Transloco does not load translation files. We need to load it manually;
             this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
               this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
             });
