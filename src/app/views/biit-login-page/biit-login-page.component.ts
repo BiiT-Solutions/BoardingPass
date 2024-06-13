@@ -13,7 +13,7 @@ import {
 import {
   AuthService as UserManagerAuthService,
   SessionService as UserManagerSessionService,
-  OrganizationService, Organization
+  OrganizationService, Organization, UserService
 } from 'user-manager-structure-lib';
 import {
   AuthService as InfographicAuthService,
@@ -47,6 +47,7 @@ export class BiitLoginPageComponent implements OnInit {
               private infographicSessionService: InfographicSessionService,
               private organizationService: OrganizationService,
               private permissionService: PermissionService,
+              private userService: UserService,
               private biitSnackbarService: BiitSnackbarService,
               private activateRoute: ActivatedRoute,
               private router: Router,
@@ -162,4 +163,18 @@ export class BiitLoginPageComponent implements OnInit {
     });
   }
 
+  protected onResetPassword(email: string) {
+    this.userService.resetPassword(email).subscribe({
+      next: () => {
+        this.translocoService.selectTranslate('success', {},  {scope: 'biit-ui/login'}).subscribe(msg => {
+          this.biitSnackbarService.showNotification(msg, NotificationType.SUCCESS, null, 5);
+        });
+      },
+      error: () => {
+        this.translocoService.selectTranslate('error', {},  {scope: 'biit-ui/login'}).subscribe(msg => {
+          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
+        });
+      }
+    })
+  }
 }
