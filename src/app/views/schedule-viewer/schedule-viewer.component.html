@@ -1,7 +1,7 @@
 <ng-container>
   <biit-progress-bar [type]="BiitProgressBarType.INDETERMINATE" *ngIf="loading"></biit-progress-bar>
 
-  <div class="canvas" *ngIf="!graphSvg || graphSvg == 'empty'" [style.opacity]="loading ? 0 : 1">
+  <div class="canvas" *ngIf="view == 'browse'" [style.opacity]="loading ? 0 : 1">
     <ng-container *ngTemplateOutlet="!currentAppointments || !currentAppointments.length ? no_activities : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments.length > 1 ? roadmap : undefined"></ng-container>
@@ -70,7 +70,7 @@
 
 <ng-template #qr>
   <div class="qr-wrapper" *transloco="let t">
-    <img src="{{currentAppointments[index].qr?.base64}}">
+    <img src="{{currentAppointments[index].qr?.base64}}" alt="qr image">
     <span>{{t('t.label_show_qr')}}</span>
   </div>
 </ng-template>
@@ -101,10 +101,10 @@
 </ng-template>
 
 <ng-template #graph>
-  <div class="graph-wrapper" [style.opacity]="loading ? 0 : 1" [class.hide]="!graphDiv.innerHTML || graphDiv.innerHTML == 'empty'" *transloco="let t">
+  <div class="graph-wrapper" [style.display]="view == 'browse' ? 'none' : null" [style.opacity]="loading ? 0 : 1" [class.hide]="!graphDiv.innerHTML || graphDiv.innerHTML == 'empty'" *transloco="let t">
     <div #graphDiv id="graphSvg"></div>
     <button class="join"
-            (click)="graphDiv.innerHTML = 'empty'"
+            (click)="graphDiv.innerHTML = 'empty'; view = 'browse'"
     >
       {{t('t.go_back')}}
     </button>

@@ -34,7 +34,6 @@ export class ScheduleViewerComponent implements OnInit {
 
   protected loading = false;
   protected view: 'browse' | 'graph' = 'browse';
-  protected graphSvg: string;
 
   protected readonly BiitProgressBarType = BiitProgressBarType;
 
