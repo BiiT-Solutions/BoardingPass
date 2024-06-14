@@ -51,8 +51,8 @@ export class ScheduleViewerComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     combineLatest([
-      this.appointmentService.getTodayAttendee(),
-      this.appointmentService.getNextAttendee()
+      this.appointmentService.getTodayAttendedByLoggedUser(),
+      this.appointmentService.getNextAttendedByLoggedUser()
     ]).subscribe({
       next: ([today, next]) => {
         this.currentAppointments = today.map(a => a as ExtendedAppointment);

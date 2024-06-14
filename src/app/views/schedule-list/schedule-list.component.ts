@@ -34,8 +34,8 @@ export class ScheduleListComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     combineLatest([
-      this.appointmentService.getTodayByOrganization(sessionStorage.getItem('organization')),
-      this.appointmentService.getNextByOrganization(sessionStorage.getItem('organization'))
+      this.appointmentService.getTodayAll(),
+      this.appointmentService.getNextAll()
     ]).subscribe({
       next: ([today, next]) => {
         this.currentAppointments = today;
