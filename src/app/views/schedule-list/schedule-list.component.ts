@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {Appointment, AppointmentService} from "appointment-center-structure-lib";
-import {combineLatest} from "rxjs";
+import {combineLatest, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {Constants} from "../../shared/constants";
 import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
 import {HttpErrorResponse} from "@angular/common/http";
+import {PermissionService} from "../../services/permission.service";
+import {Permission} from "../../config/rbac/permission";
 
 @Component({
   selector: 'schedule-viewer',
@@ -28,15 +30,20 @@ export class ScheduleListComponent implements OnInit {
   constructor(private translocoService: TranslocoService,
               private biitSnackbarService: BiitSnackbarService,
               private appointmentService: AppointmentService,
+              private permissionService: PermissionService,
               private router: Router) {
   }
 
   ngOnInit() {
     this.loading = true;
-    combineLatest([
-      this.appointmentService.getTodayAll(),
-      this.appointmentService.getNextAll()
-    ]).subscribe({
+    let promises: [Observable<Appointment[]>, Observable<Appointment>];
+
+    if (this.permissionService.hasPermission(Permission.BOARDING_PASS.ADMIN)) {
+      promises = [this.appointmentService.getTodayAll(), this.appointmentService.getNextAll()]
+    } else {
+      promises = [this.appointmentService.getTodaySpeakerByLoggedUser(), this.appointmentService.getNextSpeakerByLoggedUser()]
+    }
+    combineLatest(promises).subscribe({
       next: ([today, next]) => {
         this.currentAppointments = today;
         this.nextAppointment = next;
