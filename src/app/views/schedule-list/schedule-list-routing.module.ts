@@ -1,14 +1,14 @@
 import {RouterModule, Routes} from "@angular/router";
+import {ScheduleListComponent} from "./schedule-list.component";
 import {NgModule} from "@angular/core";
-import {AppointmentCalendarComponent} from "./appointment-calendar.component";
 const routes: Routes = [
   {
     path: '',
-    component: AppointmentCalendarComponent
+    component: ScheduleListComponent
   }
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppointmentCalendarRoutingModule { }
+export class ScheduleListRoutingModule { }

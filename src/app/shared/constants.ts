@@ -5,6 +5,7 @@ export class Constants {
   }
   public static readonly PATHS = class {
     public static readonly SCHEDULE_VIEWER: string = '/schedule';
+    public static readonly SCHEDULE_LIST: string = '/schedule-list';
     public static readonly SCANNER: string = '/scanner';
 
     public static readonly QUERY = class {
@@ -18,12 +19,4 @@ export class Constants {
     public static readonly EXPIRES: string = 'expires';
     public static readonly TIMEZONE: string = 'X-Time-Zone';
   }
-
-  public static readonly PASSWORDS = class {
-    public static readonly PASSWD_REGEX:RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-    public static readonly MIN_LENGTH = 12
-    public static readonly MAX_LENGTH = 25
-  }
-
-
 }
