@@ -2,10 +2,14 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {NgxScannerQrcodeComponent, ScannerQRCodeResult} from "ngx-scanner-qrcode";
 import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
-import {Attendance, AttendanceService} from "appointment-center-structure-lib";
+import {Appointment, AppointmentService, Attendance, AttendanceService} from "appointment-center-structure-lib";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Constants} from "../../shared/constants";
+import {combineLatest} from "rxjs";
+import {BiitTableColumn, BiitTableColumnFormat, BiitTableData} from "biit-ui/table";
+import {UserService} from "user-manager-structure-lib";
+import {User} from "authorization-services-lib";
 
 @Component({
   selector: 'scanner',
@@ -23,19 +27,27 @@ export class ScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('action') scanner: NgxScannerQrcodeComponent;
   protected appointmentId: number;
+  protected appointment: Appointment;
   protected loading = false;
   protected success = false;
   protected error = false;
   protected title: string = "";
-  protected totalAttendees: number;
-  protected checkedAttendees: number;
+  protected attendees: User[];
+  protected attendances: Attendance[];
   protected multiCam = false;
+  protected view: 'scanner' | 'list' = 'scanner';
+
+  protected columns: BiitTableColumn[] = [];
+  protected data: BiitTableData<{name: string, status: string}>;
+  @ViewChild('info') info: HTMLDivElement;
 
   protected readonly BiitProgressBarType = BiitProgressBarType;
 
   constructor(private translocoService: TranslocoService,
               private biitSnackbarService: BiitSnackbarService,
+              private appointmentService: AppointmentService,
               private attendanceService: AttendanceService,
+              private userService: UserService,
               private router: Router,
               private route: ActivatedRoute) {
   }
@@ -46,12 +58,28 @@ export class ScannerComponent implements OnInit, AfterViewInit {
       return;
     }
     this.appointmentId = Number(this.route.snapshot.paramMap.get('id'));
-    this.title = this.route.snapshot.paramMap.get('title');
-    this.totalAttendees = Number(this.route.snapshot.paramMap.get('length'));
 
-    this.attendanceService.getByAppointmentId(this.appointmentId).subscribe({
-      next: (attendances: Attendance[]) => {
-        this.checkedAttendees = attendances.length;
+    combineLatest([
+      this.translocoService.selectTranslate('name', {},  {scope: 'components/scanner'}),
+      this.translocoService.selectTranslate('status', {},  {scope: 'components/scanner'})
+    ]).subscribe({
+      next: ([name, status]) => {
+        this.columns = [
+          new BiitTableColumn('name', name),
+          new BiitTableColumn('status', status, 130, BiitTableColumnFormat.CUSTOM_HTML)
+        ]
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    combineLatest([
+      this.attendanceService.getByAppointmentId(this.appointmentId),
+      this.appointmentService.getById(this.appointmentId)
+    ]).subscribe({
+      next: ([attendances, appointment]) => {
+        this.attendances = attendances;
+        this.appointment = appointment;
       },
       error: (response: HttpErrorResponse) => {
         const error: string = response.status.toString();
@@ -60,19 +88,26 @@ export class ScannerComponent implements OnInit, AfterViewInit {
           this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
         });
       }
+    }).add(() => {
+      this.userService.getByUuids(this.appointment.attendees).subscribe({
+        next: (users) => {
+          this.attendees = users;
+          this.nextData();
+        }
+      }).add(() => {
+        //Initializing camera after the callback so they don't collide
+        const playDeviceFacingBack = (devices: any[]) => {
+          if (devices.length > 1) {
+            this.multiCam = true;
+          }
+          const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
+          this.scanner.playDevice(device.deviceId);
+        }
+
+        this.scanner.start(playDeviceFacingBack);
+      })
     });
-  }
 
-  ngAfterViewInit() {
-    const playDeviceFacingBack = (devices: any[]) => {
-      if (devices.length > 1) {
-        this.multiCam = true;
-      }
-      const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
-      this.scanner.playDevice(device.deviceId);
-    }
-
-    this.scanner.start(playDeviceFacingBack);
   }
 
   protected scanQr(result: ScannerQRCodeResult[]) {
@@ -85,7 +120,8 @@ export class ScannerComponent implements OnInit, AfterViewInit {
 
         this.attendanceService.getByAppointmentId(this.appointmentId).subscribe({
           next: (attendances) => {
-            this.checkedAttendees = attendances.length;
+            this.attendances = attendances;
+            this.nextData();
           },
           error: (response: HttpErrorResponse) => {
             const error: string = response.status.toString();
@@ -138,5 +174,20 @@ export class ScannerComponent implements OnInit, AfterViewInit {
     this.scanner.devices.subscribe((value) => {
       this.scanner.playDevice(value[this.scanner.deviceIndexActive+1] ? value[this.scanner.deviceIndexActive+1].deviceId : value[0].deviceId);
     });
+  }
+
+  private nextData() {
+    this.data = new BiitTableData<any>(
+      this.attendees.map(user => {
+        let entry = {name: '', status: ''} ;
+        entry.name = user.name + ' ' + user.lastname;
+        if (this.attendances.find(a => a.attendee == user.uuid)) {
+          entry.status = "<span>" + this.translocoService.translate('t.checked_in') + "</span>";
+        } else {
+          entry.status = "<span class=\"absent\">" + this.translocoService.translate('t.absent') + "</span>";
+        }
+        return entry;
+      }
+    ), this.attendees.length);
   }
 }

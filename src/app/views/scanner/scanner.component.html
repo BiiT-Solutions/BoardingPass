@@ -1,26 +1,52 @@
 <biit-progress-bar *ngIf="loading" [type]="BiitProgressBarType.INDETERMINATE"></biit-progress-bar>
 
-<div class="overlay" *transloco="let t">
-  <span class="label-place-inside">{{t('t.place_inside')}}</span>
-  <div class="window"
-       [class.success]="success"
-       [class.error]="error"></div>
-  <span *ngIf="loading" class="label-result" style="font-size: 3vmin">{{t('t.please_wait')}}</span>
-  <span *ngIf="success" class="label-result">{{t('t.welcome')}}</span>
-  <span *ngIf="error" class="label-result">{{t('t.try_again')}}</span>
+<ng-container *ngTemplateOutlet="view == 'scanner' ? scanner : list"></ng-container>
+
+<div #info class="bottom-info" [class.covered]="view == 'list'"
+     [style.color]="view == 'list' ? '#252525' : null">
+  <span class="label-bottom main" [style.opacity]="!appointment ? 0 : 1">{{appointment?.title}}</span>
+  <span class="label-bottom" [style.opacity]="!attendances ? 0 : 1">{{attendances?.length}} / {{attendees?.length}}</span>
+</div>
+<biit-progress-bar [type]="BiitProgressBarType.DETERMINATE" [value]="(100/attendees?.length) * attendances?.length" class="progress"
+                   [style.opacity]="!attendances ? 0 : 1"></biit-progress-bar>
+<div class="bottom-bar" *transloco="let t">
+  <div class="button" [class.selected]="view == 'scanner'"
+       (click)="view = 'scanner'">
+    <biit-icon [name]="'swap'" [pathStyle]="{fill: view == 'scanner' ? '#F20D5E' : '#252525'}"></biit-icon>
+    <span class="icon-text">{{t('t.scanner')}}</span>
+  </div>
+  <div class="button" [class.selected]="view == 'list'"
+       (click)="view = 'list'">
+    <biit-icon [name]="'swap'" [pathStyle]="{fill: view == 'list' ? '#F20D5E' : '#252525'}"></biit-icon>
+    <span class="icon-text">{{t('t.attendees')}}</span>
+  </div>
 </div>
 
-<biit-icon *ngIf="multiCam"
-           name="swap"
-           pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"
-></biit-icon>
+<ng-template #scanner>
+  <div class="overlay" *transloco="let t">
+    <span class="label-place-inside">{{t('t.place_inside')}}</span>
+    <div class="window"
+         [class.success]="success"
+         [class.error]="error"></div>
+    <span *ngIf="loading" class="label-result" style="font-size: 3vmin">{{t('t.please_wait')}}</span>
+    <span *ngIf="success" class="label-result">{{t('t.welcome')}}</span>
+    <span *ngIf="error" class="label-result">{{t('t.try_again')}}</span>
+  </div>
 
+  <biit-icon *ngIf="multiCam"
+             name="swap"
+             [pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"
+  ></biit-icon>
 
-<ngx-scanner-qrcode #action="scanner"
-                    (event)="scanQr($event)"
-></ngx-scanner-qrcode>
+  <ngx-scanner-qrcode #action="scanner"
+                      (event)="scanQr($event)"
+  ></ngx-scanner-qrcode>
+</ng-template>
 
-<span class="label-bottom left" [style.opacity]="!checkedAttendees ? 0 : 1">{{title}}</span>
-<span class="label-bottom right" [style.opacity]="!checkedAttendees ? 0 : 1">{{checkedAttendees}} / {{totalAttendees}}</span>
-<biit-progress-bar [type]="BiitProgressBarType.DETERMINATE" [value]="(100/totalAttendees) * checkedAttendees" class="progress"
-                   [style.opacity]="!checkedAttendees ? 0 : 1"></biit-progress-bar>
+<ng-template #list>
+  <biit-table hideFooter hideHeader
+              [ngStyle]="{height: 'calc(100% - 3rem - ' + info.offsetHeight + 'px)', background: 'white'}"
+              [columns]="columns"
+              [data]="data"
+  ></biit-table>
+</ng-template>
