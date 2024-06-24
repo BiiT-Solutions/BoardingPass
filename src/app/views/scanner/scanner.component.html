@@ -12,12 +12,12 @@
 <div class="bottom-bar" *transloco="let t">
   <div class="button" [class.selected]="view == 'scanner'"
        (click)="view = 'scanner'">
-    <biit-icon [name]="'swap'" [pathStyle]="{fill: view == 'scanner' ? '#F20D5E' : '#252525'}"></biit-icon>
+    <biit-icon [name]="'scanner'" [pathStyle]="{fill: view == 'scanner' ? '#F20D5E' : '#252525'}"></biit-icon>
     <span class="icon-text">{{t('t.scanner')}}</span>
   </div>
   <div class="button" [class.selected]="view == 'list'"
        (click)="view = 'list'">
-    <biit-icon [name]="'swap'" [pathStyle]="{fill: view == 'list' ? '#F20D5E' : '#252525'}"></biit-icon>
+    <biit-icon [name]="'user_group'" [pathStyle]="{fill: view == 'list' ? '#F20D5E' : '#252525'}"></biit-icon>
     <span class="icon-text">{{t('t.attendees')}}</span>
   </div>
 </div>
