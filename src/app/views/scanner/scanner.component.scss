@@ -151,8 +151,22 @@ ngx-scanner-qrcode {
   }
 }
 
-::ng-deep biit-table .absent {
+.absent {
+  width: 100%;
+  text-align: center;
   font-weight: 700;
   text-transform: uppercase;
   color: #A1093F;
+}
+
+.checked-in {
+  width: 100%;
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #A1093F;
+}
+
+::ng-deep biit-datatable .status-cell span {
+  color: red;
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {NgxScannerQrcodeComponent, ScannerQRCodeResult} from "ngx-scanner-qrcode";
 import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Constants} from "../../shared/constants";
 import {combineLatest} from "rxjs";
-import {BiitTableColumn, BiitTableColumnFormat, BiitTableData} from "biit-ui/table";
+import {DatatableColumn} from "biit-ui/table";
 import {UserService} from "user-manager-structure-lib";
 import {User} from "authorization-services-lib";
 
@@ -26,6 +26,7 @@ import {User} from "authorization-services-lib";
 export class ScannerComponent implements OnInit, AfterViewInit {
 
   @ViewChild('action') scanner: NgxScannerQrcodeComponent;
+  @ViewChildren('statusTableCell') statusTableCell: QueryList<TemplateRef<any>>;
   protected appointmentId: number;
   protected appointment: Appointment;
   protected loading = false;
@@ -37,8 +38,8 @@ export class ScannerComponent implements OnInit, AfterViewInit {
   protected multiCam = false;
   protected view: 'scanner' | 'list' = 'scanner';
 
-  protected columns: BiitTableColumn[] = [];
-  protected data: BiitTableData<{name: string, status: string}>;
+  protected _columns: DatatableColumn[] = [];
+  protected _data: {name: string, status: boolean}[] = [];
   @ViewChild('info') info: HTMLDivElement;
 
   protected readonly BiitProgressBarType = BiitProgressBarType;
@@ -64,10 +65,12 @@ export class ScannerComponent implements OnInit, AfterViewInit {
       this.translocoService.selectTranslate('status', {},  {scope: 'components/scanner'})
     ]).subscribe({
       next: ([name, status]) => {
-        this.columns = [
-          new BiitTableColumn('name', name),
-          new BiitTableColumn('status', status, 130, BiitTableColumnFormat.CUSTOM_HTML)
-        ]
+        this.statusTableCell.changes.subscribe(ref => {
+          this._columns = [
+            new DatatableColumn(name, 'name'),
+            new DatatableColumn(status, 'status', undefined, undefined, undefined, undefined, ref.first)
+          ];
+        });
       }
     });
   }
@@ -92,7 +95,7 @@ export class ScannerComponent implements OnInit, AfterViewInit {
       this.userService.getByUuids(this.appointment.attendees).subscribe({
         next: (users) => {
           this.attendees = users;
-          this.nextData();
+          this._nextData();
         }
       }).add(() => {
         //Initializing camera after the callback so they don't collide
@@ -121,7 +124,7 @@ export class ScannerComponent implements OnInit, AfterViewInit {
         this.attendanceService.getByAppointmentId(this.appointmentId).subscribe({
           next: (attendances) => {
             this.attendances = attendances;
-            this.nextData();
+            this._nextData();
           },
           error: (response: HttpErrorResponse) => {
             const error: string = response.status.toString();
@@ -176,18 +179,15 @@ export class ScannerComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private nextData() {
-    this.data = new BiitTableData<any>(
-      this.attendees.map(user => {
-        let entry = {name: '', status: ''} ;
+  private _nextData() {
+    this._data = this.attendees.map(user => {
+        let entry = {name: '', status: false} ;
         entry.name = user.name + ' ' + user.lastname;
         if (this.attendances.find(a => a.attendee == user.uuid)) {
-          entry.status = "<span>" + this.translocoService.translate('t.checked_in') + "</span>";
-        } else {
-          entry.status = "<span class=\"absent\">" + this.translocoService.translate('t.absent') + "</span>";
+          entry.status = true;
         }
         return entry;
       }
-    ), this.attendees.length);
+    );
   }
 }

@@ -44,9 +44,14 @@
 </ng-template>
 
 <ng-template #list>
-  <biit-table hideFooter hideHeader
-              [ngStyle]="{height: 'calc(100% - 3rem - ' + info.offsetHeight + 'px)', background: 'white'}"
-              [columns]="columns"
-              [data]="data"
-  ></biit-table>
+  <biit-datatable hideHeader hideFooter
+                  [data]="_data"
+                  [columns]="_columns"
+                  [ngStyle]="{height: 'calc(100% - 3rem - ' + info.offsetHeight + 'px)', background: 'white', width: '100%'}"
+  ></biit-datatable>
+</ng-template>
+
+<ng-template #statusTableCell *transloco="let t" let-row="row" let-value="value" let-i="index">
+  <span *ngIf="value" class="checked-in">{{ t('t.checked_in') }}</span>
+  <span *ngIf="!value" class="absent">{{ t('t.absent') }}</span>
 </ng-template>

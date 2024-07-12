@@ -6,7 +6,7 @@ import {ScannerRoutingModule} from "./scanner-routing.module";
 import {LOAD_WASM, NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
 import {BiitProgressBarModule} from "biit-ui/info";
 import {BiitIconModule} from "biit-ui/icon";
-import {BiitTableModule} from "biit-ui/table";
+import {BiitDatatableModule} from "biit-ui/table";
 
 LOAD_WASM().subscribe();
 
@@ -24,7 +24,7 @@ LOAD_WASM().subscribe();
         NgxScannerQrcodeModule,
         BiitProgressBarModule,
         BiitIconModule,
-        BiitTableModule
+        BiitDatatableModule
     ]
 })
 export class ScannerModule { }
