@@ -6,7 +6,7 @@ import {Appointment, AppointmentService, Attendance, AttendanceService} from "ap
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {Constants} from "../../shared/constants";
-import {combineLatest} from "rxjs";
+import {combineLatest, timeout} from "rxjs";
 import {DatatableColumn} from "biit-ui/table";
 import {UserService} from "user-manager-structure-lib";
 import {User} from "authorization-services-lib";
@@ -98,19 +98,26 @@ export class ScannerComponent implements OnInit, AfterViewInit {
           this._nextData();
         }
       }).add(() => {
-        //Initializing camera after the callback so they don't collide
-        const playDeviceFacingBack = (devices: any[]) => {
-          if (devices.length > 1) {
-            this.multiCam = true;
-          }
-          const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
-          this.scanner.playDevice(device.deviceId);
-        }
-
-        this.scanner.start(playDeviceFacingBack);
+        this.startScanner();
       })
     });
 
+  }
+
+  protected startScanner() {
+    setTimeout(() => {
+
+      //Initializing camera after the callback so they don't collide
+      const playDeviceFacingBack = (devices: any[]) => {
+        if (devices.length > 1) {
+          this.multiCam = true;
+        }
+        const device = devices.find(f => (/back|trás|rear|traseira|environment|ambiente/gi.test(f.label))) ?? devices.pop();
+        this.scanner.playDevice(device.deviceId);
+      }
+
+      this.scanner.start(playDeviceFacingBack);
+    }, 5);
   }
 
   protected scanQr(result: ScannerQRCodeResult[]) {
@@ -190,4 +197,6 @@ export class ScannerComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
+  protected readonly timeout = timeout;
 }

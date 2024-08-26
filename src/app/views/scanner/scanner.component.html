@@ -11,7 +11,7 @@
                    [style.opacity]="!attendances ? 0 : 1"></biit-progress-bar>
 <div class="bottom-bar" *transloco="let t">
   <div class="button" [class.selected]="view == 'scanner'"
-       (click)="view = 'scanner'">
+       (click)="view = 'scanner'; startScanner()">
     <biit-icon [name]="'scanner'" [pathStyle]="{fill: view == 'scanner' ? '#F20D5E' : '#252525'}"></biit-icon>
     <span class="icon-text">{{t('t.scanner')}}</span>
   </div>
@@ -36,6 +36,7 @@
   <biit-icon *ngIf="multiCam"
              name="swap"
              [pathStyle]="{fill: '#ffffff'}" style="width: 40px; height: 40px; position: absolute; top: 20px; right: 20px; z-index: 2; cursor: pointer"
+             (click)="switchCamera()"
   ></biit-icon>
 
   <ngx-scanner-qrcode #action="scanner"
