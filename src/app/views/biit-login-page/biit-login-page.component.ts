@@ -22,6 +22,7 @@ import {
 import {combineLatest} from "rxjs";
 import {PermissionService} from "../../services/permission.service";
 import {Permission} from "../../config/rbac/permission";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'biit-login-page',
@@ -110,12 +111,7 @@ export class BiitLoginPageComponent implements OnInit {
               sessionStorage.setItem('organization', orgs[0].id);
             }
           },
-          error: (response: HttpResponse<void>) => {
-            const error: string = response.status.toString();
-            this.translocoService.selectTranslate(error, {},  {scope: 'biit-ui/utils'}).subscribe(msg => {
-              this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-            });
-          }
+          error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
         }).add(() => {
           if (this.permissionService.hasPermission(Permission.BOARDING_PASS.ADMIN) ||
             this.permissionService.hasPermission(Permission.BOARDING_PASS.MANAGER)) {
@@ -125,13 +121,7 @@ export class BiitLoginPageComponent implements OnInit {
           }
         });
       },
-      error: (response: HttpResponse<void>) => {
-        const error: string = response.status.toString();
-        // Transloco does not load translation files. We need to load it manually;
-        this.translocoService.selectTranslate(error, {},  {scope: 'biit-ui/utils'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     }).add(() => {
       this.waiting = false;
     });
@@ -170,11 +160,7 @@ export class BiitLoginPageComponent implements OnInit {
           this.biitSnackbarService.showNotification(msg, NotificationType.SUCCESS, null, 5);
         });
       },
-      error: () => {
-        this.translocoService.selectTranslate('error', {},  {scope: 'biit-ui/login'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     })
   }
 }

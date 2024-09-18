@@ -13,6 +13,7 @@ import {ExtendedAppointment} from "../../shared/models/extended-appointment";
 import {SvgService} from "infographic-engine-lib";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'schedule-viewer',
@@ -57,13 +58,7 @@ export class ScheduleViewerComponent implements OnInit {
         this.currentAppointments = today.map(a => a as ExtendedAppointment);
         this.nextAppointment = next;
       },
-      error: (response: HttpErrorResponse) => {
-        const error: string = response.status.toString();
-        // Transloco does not load translation files. We need to load it manually;
-        this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     }).add(() => {
       combineLatest([
         this.loadQrs(),
@@ -73,13 +68,7 @@ export class ScheduleViewerComponent implements OnInit {
           qrs.forEach((qr, index) => this.currentAppointments[index].qr = qr);
           attendances.forEach((attended, index) => this.currentAppointments[index].attended = attended);
         },
-        error: (response: HttpErrorResponse) => {
-          const error: string = response.status.toString();
-          // Transloco does not load translation files. We need to load it manually;
-          this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-            this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-          });
-        }
+        error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
       }).add(() => {
         this.loading = false;
       });
@@ -112,22 +101,10 @@ export class ScheduleViewerComponent implements OnInit {
             document.getElementById("graphSvg").innerHTML = graph[0];
             this.view = 'graph';
           },
-          error: (response: HttpResponse<void>) => {
-            const error: string = response.status.toString();
-            // Transloco does not load translation files. We need to load it manually;
-            this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-              this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-            });
-          }
+          error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
         })
       },
-      error: (response: HttpResponse<void>) => {
-        const error: string = response.status.toString();
-        // Transloco does not load translation files. We need to load it manually;
-        this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     })
   }
 }

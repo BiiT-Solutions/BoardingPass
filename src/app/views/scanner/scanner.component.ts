@@ -10,6 +10,7 @@ import {combineLatest, timeout} from "rxjs";
 import {DatatableColumn} from "biit-ui/table";
 import {UserService} from "user-manager-structure-lib";
 import {User} from "authorization-services-lib";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'scanner',
@@ -84,19 +85,14 @@ export class ScannerComponent implements OnInit, AfterViewInit {
         this.attendances = attendances;
         this.appointment = appointment;
       },
-      error: (response: HttpErrorResponse) => {
-        const error: string = response.status.toString();
-        // Transloco does not load translation files. We need to load it manually;
-        this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     }).add(() => {
       this.userService.getByUuids(this.appointment.attendees).subscribe({
         next: (users) => {
           this.attendees = users;
           this._nextData();
-        }
+        },
+        error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
       }).add(() => {
         this.startScanner();
       })
@@ -133,13 +129,7 @@ export class ScannerComponent implements OnInit, AfterViewInit {
             this.attendances = attendances;
             this._nextData();
           },
-          error: (response: HttpErrorResponse) => {
-            const error: string = response.status.toString();
-            // Transloco does not load translation files. We need to load it manually;
-            this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-              this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-            });
-          }
+          error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
         });
       },
       error: () => {

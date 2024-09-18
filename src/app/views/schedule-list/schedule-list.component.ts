@@ -8,6 +8,7 @@ import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-u
 import {HttpErrorResponse} from "@angular/common/http";
 import {PermissionService} from "../../services/permission.service";
 import {Permission} from "../../config/rbac/permission";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'schedule-viewer',
@@ -48,13 +49,7 @@ export class ScheduleListComponent implements OnInit {
         this.currentAppointments = today;
         this.nextAppointment = next;
       },
-      error: (response: HttpErrorResponse) => {
-        const error: string = response.status.toString();
-        // Transloco does not load translation files. We need to load it manually;
-        this.translocoService.selectTranslate(error, {},  {scope: 'components/login'}).subscribe(msg => {
-          this.biitSnackbarService.showNotification(msg, NotificationType.ERROR, null, 5);
-        });
-      }
+      error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
     }).add(() => {
       this.loading = false;
     })

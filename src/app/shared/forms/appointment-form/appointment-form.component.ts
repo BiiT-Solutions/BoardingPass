@@ -12,6 +12,7 @@ import {combineLatest} from "rxjs";
 import {UserService} from "user-manager-structure-lib";
 import {User} from "authorization-services-lib";
 import {ColorTheme} from "../../enums/color-theme";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'appointment-form',
@@ -47,15 +48,20 @@ export class AppointmentFormComponent implements OnInit {
 
     if (this.event.id) {
       this.appointmentService.getById(+this.event.id)
-        .subscribe(appointment => this.appointment = appointment)
+        .subscribe({
+          next: appointment => this.appointment = appointment,
+          error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
+        })
         .add(() => {
           if(this.appointment.attendees.length) {
             this.userService.getByUuids(this.appointment.attendees)
-              .subscribe(users =>
-                this.attendees = users.map(user => {
-                  return {value:user.uuid, label:`${user.name} ${user.lastname}`}
-                })
-              )
+              .subscribe({
+                next: users =>
+                  this.attendees = users.map(user => {
+                    return {value: user.uuid, label: `${user.name} ${user.lastname}`}
+                  }),
+                error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
+              })
           }
         });
     } else if (this.template) {
@@ -99,18 +105,14 @@ export class AppointmentFormComponent implements OnInit {
         next: (appointment: Appointment): void => {
           this.onSaved.emit(CalendarEventConversor.convertToCalendarEvent(appointment));
         },
-        error: (error: HttpErrorResponse): void => {
-          this.snackbarService.showNotification(this.transloco.translate('form.server_failed'), NotificationType.WARNING, null, 5);
-        }
+        error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
       })
     } else {
       this.appointmentService.create(this.appointment).subscribe({
         next: (appointment: Appointment): void => {
           this.onSaved.emit(CalendarEventConversor.convertToCalendarEvent(appointment));
         },
-        error: (error: HttpErrorResponse): void => {
-          this.snackbarService.showNotification(this.transloco.translate('form.server_failed'), NotificationType.WARNING, null, 5);
-        }
+        error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
       })
     }
   }
