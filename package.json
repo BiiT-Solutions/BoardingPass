@@ -1,6 +1,6 @@
 {
   "name": "boarding-pass",
-  "version": "0.0.79",
+  "version": "0.0.80",
   "scripts": {
     "ng": "ng",
     "start": "npm run prepare:translations && ng serve",
