@@ -1,10 +1,9 @@
 import {AfterViewInit, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {NgxScannerQrcodeComponent, ScannerQRCodeResult} from "ngx-scanner-qrcode";
-import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
+import {BiitProgressBarType, BiitSnackbarService} from "biit-ui/info";
 import {Appointment, AppointmentService, Attendance, AttendanceService} from "appointment-center-structure-lib";
 import {ActivatedRoute, Router} from "@angular/router";
-import {HttpErrorResponse} from "@angular/common/http";
 import {Constants} from "../../shared/constants";
 import {combineLatest, timeout} from "rxjs";
 import {DatatableColumn} from "biit-ui/table";
@@ -129,18 +128,30 @@ export class ScannerComponent implements OnInit, AfterViewInit {
             this.attendances = attendances;
             this._nextData();
           },
-          error: error => ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
+          error: error => {
+            this.error = true;
+            ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService)
+          }
         });
       },
-      error: () => {
+      error: error => {
         this.error = true;
+        ErrorHandler.notify(error, this.translocoService, this.biitSnackbarService);
       }
     }).add(() => {
       this.loading = false;
-      setTimeout(() => {
-        this.scanner.play();
-        this.clearState();
-      }, 1500);
+
+      if (this.error) {
+        setTimeout(() => {
+          this.scanner.play();
+          this.clearState();
+        }, 5000);
+      } else {
+        setTimeout(() => {
+          this.scanner.play();
+          this.clearState();
+        }, 3000);
+      }
     });
   }
 
