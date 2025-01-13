@@ -13,6 +13,7 @@ import {UserService} from "user-manager-structure-lib";
 import {User} from "authorization-services-lib";
 import {ColorTheme} from "../../enums/color-theme";
 import {combineLatest} from "rxjs";
+import {ErrorHandler} from "biit-ui/utils";
 
 @Component({
   selector: 'workshop-form',
@@ -53,9 +54,7 @@ export class WorkshopFormComponent implements OnInit {
         next: (users: User[]): void => {
           this.speakers = users.map(user => {return {value:user.uuid, label:`${user.name} ${user.lastname}`}});
         },
-        error: () => {
-          this.snackbarService.showNotification(this.transloco.translate('form.server_failed'), NotificationType.WARNING, null, 5);
-        }
+        error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
       })
     }
 
@@ -76,18 +75,14 @@ export class WorkshopFormComponent implements OnInit {
         next: (appointmentTemplate: AppointmentTemplate): void => {
           this.onSaved.emit(appointmentTemplate);
         },
-        error: (error: HttpErrorResponse): void => {
-          this.snackbarService.showNotification(this.transloco.translate('form.server_failed'), NotificationType.WARNING, null, 5);
-        }
+        error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
       })
     } else {
       this.appointmentTemplateService.create(this.workshop).subscribe({
         next: (appointmentTemplate: AppointmentTemplate): void => {
           this.onSaved.emit(appointmentTemplate);
         },
-        error: (error: HttpErrorResponse): void => {
-          this.snackbarService.showNotification(this.transloco.translate('form.server_failed'), NotificationType.WARNING, null, 5);
-        }
+        error: error => ErrorHandler.notify(error, this.transloco, this.snackbarService)
       })
     }
   }

@@ -1,6 +1,12 @@
 {
-  "place_inside": "Coloca el código dentro de la caja",
+  "place_inside": "Coloca el código dentro del cuadrado",
   "welcome": "¡Bienvenid@!",
   "try_again": "Prueba otra vez",
-  "please_wait": "Por favor, espere un momento"
+  "please_wait": "Por favor, espere un momento",
+  "scanner": "Escáner",
+  "attendees": "Asistentes",
+  "name": "Nombre",
+  "status": "Estado",
+  "checked_in": "Registrado",
+  "absent": "Ausente"
 }
