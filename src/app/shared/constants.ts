@@ -18,5 +18,7 @@ export class Constants {
     public static readonly AUTHORIZATION_RESPONSE: string = 'authorization';
     public static readonly EXPIRES: string = 'expires';
     public static readonly TIMEZONE: string = 'X-Time-Zone';
+    public static readonly CACHE_CONTROL: string = 'Cache-Control';
+    public static readonly PRAGMA: string = 'Pragma';
   }
 }
