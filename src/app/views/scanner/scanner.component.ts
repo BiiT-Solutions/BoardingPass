@@ -76,6 +76,10 @@ export class ScannerComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    // Regardless of whether the ngOnInit is redirecting or not, this method will be called. So, we need to take control of the flow.
+    if (!this.route.snapshot.paramMap.get('id')) {
+      return;
+    }
     combineLatest([
       this.attendanceService.getByAppointmentId(this.appointmentId),
       this.appointmentService.getById(this.appointmentId)
