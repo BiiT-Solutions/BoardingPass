@@ -1,47 +1,47 @@
 <ng-container *transloco="let t">
   <div class="canvas">
-    <div class="row">
-      <a class="title">{{workshop.title}}</a>
+    <div id="title" class="row">
+      <a class="title">{{ workshop.title }}</a>
       <biit-icon name="cross_wide"
                  class="icon"
                  [pathStyle]="{fill:'#262626'}"
                  (click)="onClosed.emit()"
       ></biit-icon>
     </div>
-    <div class="row">
+    <div id="speaker" class="row">
       <biit-icon name="speaker"
                  class="icon info"
                  [pathStyle]="{fill:'#f20d5e'}"
       ></biit-icon>
-      <a>{{speakersLabel}}</a>
+      <a>{{ speakersLabel }}</a>
     </div>
-    <div class="row" *ngIf="!$any(workshop).subscribed">
+    <div id="timetable" class="row" *ngIf="!$any(workshop).subscribed">
       <biit-icon name="timetable"
                  class="icon info"
                  [pathStyle]="{fill:'#f20d5e'}"
       ></biit-icon>
       <a style="white-space: pre-line">
-        {{workshop.duration | timeDuration}}
+        {{ workshop.duration | timeDuration }}
       </a>
     </div>
     <div class="row" *ngIf="!$any(workshop).subscribed">
-      <button biit-button tertiary>
-        {{t('form.next_event')}}
+      <button id="next-button" biit-button tertiary>
+        {{ t('form.next_event') }}
       </button>
     </div>
     <div class="row"
          style="justify-content: space-between"
          *ngFor="let event of subscribedEvents">
-      <div style="display: flex">
-      <biit-icon name="timetable"
-                 class="icon info"
-                 [pathStyle]="{fill:'#f20d5e'}"
-      ></biit-icon>
-      <a style="white-space: pre-line">
-        {{event | eventCardDate}}
-      </a>
+      <div id="date" style="display: flex">
+        <biit-icon name="timetable"
+                   class="icon info"
+                   [pathStyle]="{fill:'#f20d5e'}"
+        ></biit-icon>
+        <a style="white-space: pre-line">
+          {{ event | eventCardDate }}
+        </a>
       </div>
-      <biit-icon name="right_double_arrow"
+      <biit-icon id="start-button" name="right_double_arrow"
                  class="icon info"
                  style="cursor: pointer"
                  (click)="onNextDate.emit(event.start)"

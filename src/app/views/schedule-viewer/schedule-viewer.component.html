@@ -1,27 +1,36 @@
 <ng-container>
   <biit-progress-bar [type]="BiitProgressBarType.INDETERMINATE" *ngIf="loading"></biit-progress-bar>
 
-  <div class="canvas" *ngIf="view == 'browse'" [style.opacity]="loading ? 0 : 1">
-    <ng-container *ngTemplateOutlet="!currentAppointments || !currentAppointments.length ? no_activities : undefined"></ng-container>
-    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
-    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments.length > 1 ? roadmap : undefined"></ng-container>
+  <div class="canvas" id="canvas" *ngIf="view == 'browse'" [style.opacity]="loading ? 0 : 1">
+    <ng-container
+      *ngTemplateOutlet="!currentAppointments || !currentAppointments.length ? no_activities : undefined"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? info : undefined"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="currentAppointments && currentAppointments.length > 1 ? roadmap : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? qr : undefined"></ng-container>
-    <ng-container *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? bottom_section : undefined"></ng-container>
+    <ng-container
+      *ngTemplateOutlet="currentAppointments && currentAppointments[index] ? bottom_section : undefined"></ng-container>
   </div>
 
   <ng-container *ngTemplateOutlet="graph"></ng-container>
 </ng-container>
 
-<ng-template #no_activities>
+<ng-template id="no-activities" #no_activities>
   <div class="no-activities-wrapper" *transloco="let t">
-    <span class="title">{{t('t.label_no_activities_today')}}</span>
-    <span *ngIf="nextAppointment" class="data">{{t('t.label_next_activity')}} {{ nextAppointment.startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
-    <span *ngIf="!nextAppointment" class="data">{{t('t.label_no_next_activity')}}</span>
+    <span class="title">{{ t('t.label_no_activities_today') }}</span>
+    <span *ngIf="nextAppointment" class="data">{{ t('t.label_next_activity') }} {{
+        nextAppointment.startTime | translocoDate: {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }
+      }}</span>
+    <span *ngIf="!nextAppointment" class="data">{{ t('t.label_no_next_activity') }}</span>
   </div>
 </ng-template>
 
 <ng-template #info>
-  <div class="info-wrapper" *transloco="let t">
+  <div id="info" class="info-wrapper" *transloco="let t">
     <div class="info-row">
       <div class="info-element">
         <span class="title">{{ t('t.company') }}</span>
@@ -35,33 +44,37 @@
     <div class="info-row">
       <div class="info-element">
         <span class="title">{{ t('t.date') }}</span>
-        <span class="data">{{ currentAppointments[index].startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
+        <span class="data">{{
+            currentAppointments[index].startTime | translocoDate: {
+              dateStyle: 'medium',
+              timeStyle: 'short'
+            }
+          }}</span>
       </div>
       <div class="info-element">
         <span class="title">{{ t('t.address') }}</span>
-        <span class="data">221B Baker Street</span>
+        <span class="data">-- --</span>
       </div>
     </div>
   </div>
 </ng-template>
 
 <ng-template #roadmap>
-  <div class="roadmap-wrapper" *transloco="let t">
-    <span class="title">{{t('t.planning')}}</span>
+  <div id="roadmap" class="roadmap-wrapper" *transloco="let t">
+    <span id="roadmap-title" class="title">{{ t('t.planning') }}</span>
     <div class="course-roadmap">
       <div *ngFor="let appointment of currentAppointments; let i = index"
            class="roadmap-section"
            [class.selected]="i == index"
            [class.colored]="appointment.attended"
       >
-        <div class="circle"
-        ></div>
+        <div class="circle"></div>
         <div class="roadmap-line"></div>
       </div>
     </div>
-    <div class="course-list">
+    <div id="list" class="course-list">
       <div class="course-info" *ngFor="let appointment of currentAppointments">
-        <span class="title">{{appointment.title}}</span>
+        <span class="title">{{ appointment.title }}</span>
         <span class="data">{{ appointment.startTime | translocoDate: {timeStyle: 'short'} }}</span>
       </div>
     </div>
@@ -69,28 +82,28 @@
 </ng-template>
 
 <ng-template #qr>
-  <div class="qr-wrapper" *transloco="let t">
+  <div id="qr" class="qr-wrapper" *transloco="let t">
     <img src="{{currentAppointments[index].qr?.base64}}" alt="qr image">
-    <span>{{t('t.label_show_qr')}}</span>
+    <span>{{ t('t.label_show_qr') }}</span>
   </div>
 </ng-template>
 
 <ng-template #bottom_section>
   <div class="bottom-wrapper" *transloco="let t">
-    <button class="nav left"
+    <button id="left-button" class="nav left"
             [disabled]="!currentAppointments[index-1]"
             [style.opacity]="currentAppointments[index-1] ? 1 : 0"
             (click)="index = index-1"
     >
       <biit-icon name="nhm_arrow" [pathStyle]="{fill: '#B49057'}"></biit-icon>
     </button>
-    <button class="join"
+    <button id="join-button" class="join"
             [disabled]="!currentAppointments[index].attended"
             (click)="loadGraph()"
     >
-      {{t('t.join_to')}} {{currentAppointments[index]?.title}}
+      {{ t('t.join_to') }} {{ currentAppointments[index]?.title }}
     </button>
-    <button class="nav right"
+    <button id="right-button" class="nav right"
             [disabled]="!currentAppointments[index+1]"
             [style.opacity]="currentAppointments[index+1] ? 1 : 0"
             (click)="index = index+1"
@@ -101,12 +114,14 @@
 </ng-template>
 
 <ng-template #graph>
-  <div class="graph-wrapper" [style.display]="view == 'browse' ? 'none' : null" [style.opacity]="loading ? 0 : 1" [class.hide]="!graphDiv.innerHTML || graphDiv.innerHTML == 'empty'" *transloco="let t">
+  <div id="graph" class="graph-wrapper" [style.display]="view == 'browse' ? 'none' : null"
+       [style.opacity]="loading ? 0 : 1"
+       [class.hide]="!graphDiv.innerHTML || graphDiv.innerHTML == 'empty'" *transloco="let t">
     <div #graphDiv id="graphSvg"></div>
-    <button class="join"
+    <button id="back-button" class="join"
             (click)="graphDiv.innerHTML = 'empty'; view = 'browse'"
     >
-      {{t('t.go_back')}}
+      {{ t('t.go_back') }}
     </button>
   </div>
 </ng-template>

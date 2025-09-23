@@ -3,7 +3,7 @@
     <biit-nav-menu [routes]="routes"
     ></biit-nav-menu>
   </div>
-  <div class="right">
+  <div class="right" id="boarding-pass-menu">
     <biit-nav-user *ngIf="user"
                    [title]="user?.name + ' ' + user?.lastname"
                    [subtitle]="'Boarding Pass'"
@@ -16,6 +16,8 @@
   <ng-template contextMenuItem
                *transloco="let t"
                (execute)="router.navigateByUrl('/login?logout')">
-    {{t('t.logout')}}
+        <span id="boarding-pass-menu-logout">
+          {{ t('t.logout') }}
+        </span>
   </ng-template>
 </context-menu>

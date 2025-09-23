@@ -1,6 +1,6 @@
 <ng-container>
   <biit-progress-bar [type]="BiitProgressBarType.INDETERMINATE" *ngIf="loading"></biit-progress-bar>
-  <div class="canvas" [style.opacity]="loading ? 0 : 1">
+  <div class="canvas" id="canvas" [style.opacity]="loading ? 0 : 1">
     <ng-container *ngTemplateOutlet="!currentAppointments.length ? no_activities : undefined"></ng-container>
     <ng-container *ngTemplateOutlet="currentAppointments.length ? events : undefined"></ng-container>
   </div>
@@ -8,23 +8,28 @@
 
 <ng-template #no_activities>
   <div class="no-activities-wrapper" *transloco="let t">
-    <span class="title">{{t('t.label_no_activities_today')}}</span>
-    <span *ngIf="nextAppointment" class="data">{{t('t.label_next_activity')}} {{ nextAppointment.startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
-    <span *ngIf="!nextAppointment" class="data">{{t('t.label_no_next_activity')}}</span>
+    <span class="title">{{ t('t.label_no_activities_today') }}</span>
+    <span *ngIf="nextAppointment" class="data">{{ t('t.label_next_activity') }} {{
+        nextAppointment.startTime | translocoDate: {
+          dateStyle: 'medium',
+          timeStyle: 'short'
+        }
+      }}</span>
+    <span *ngIf="!nextAppointment" class="data">{{ t('t.label_no_next_activity') }}</span>
   </div>
 </ng-template>
 
 <ng-template #events>
-  <div class="events-wrapper" *transloco="let t">
-    <div *ngFor="let event of currentAppointments"
+  <div id="events" class="events-wrapper" *transloco="let t">
+    <div [attr.id]="'event-'+event.title" *ngFor="let event of currentAppointments"
          class="event-item">
-      <span class="title">{{event.title}}</span>
+      <span class="title">{{ event.title }}</span>
       <span class="date">{{ event.startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
       <button biit-button primary
               class="action"
               (click)="goToScanner(event)"
       >
-        {{t('t.check_in')}}
+        {{ t('t.check_in') }}
       </button>
     </div>
   </div>
