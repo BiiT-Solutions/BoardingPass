@@ -25,7 +25,7 @@
          class="event-item">
       <span class="title">{{ event.title }}</span>
       <span class="date">{{ event.startTime | translocoDate: {dateStyle: 'medium', timeStyle: 'short'} }}</span>
-      <button biit-button primary
+      <button id="open-scanner" biit-button primary
               class="action"
               (click)="goToScanner(event)"
       >
