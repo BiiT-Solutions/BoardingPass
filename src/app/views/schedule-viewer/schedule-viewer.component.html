@@ -31,18 +31,18 @@
 
 <ng-template #info>
   <div id="info" class="info-wrapper" *transloco="let t">
-    <div class="info-row">
+    <div class="info-row" id="user-organization">
       <div class="info-element">
         <span class="title">{{ t('t.company') }}</span>
         <span class="data">{{ currentAppointments[index]?.organizationId }}</span>
       </div>
-      <div class="info-element">
+      <div class="info-element" id="user-name">
         <span class="title">{{ t('t.name') }}</span>
         <span class="data">{{ [sessionService.getUser().uuid] | userNameList: [sessionService.getUser()] }}</span>
       </div>
     </div>
     <div class="info-row">
-      <div class="info-element">
+      <div class="info-element" id="user-date">
         <span class="title">{{ t('t.date') }}</span>
         <span class="data">{{
             currentAppointments[index].startTime | translocoDate: {
@@ -51,7 +51,7 @@
             }
           }}</span>
       </div>
-      <div class="info-element">
+      <div class="info-element" id="user-address">
         <span class="title">{{ t('t.address') }}</span>
         <span class="data">-- --</span>
       </div>
