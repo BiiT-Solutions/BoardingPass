@@ -4,8 +4,9 @@
 
 <div id="bottom-info" #info class="bottom-info" [class.covered]="view == 'list'"
      [style.color]="view == 'list' ? '#252525' : null">
-  <span class="label-bottom main" [style.opacity]="!appointment ? 0 : 1">{{ appointment?.title }}</span>
-  <span class="label-bottom" [style.opacity]="!attendances ? 0 : 1">{{ attendances?.length }}
+  <span id="appointment-title" class="label-bottom main"
+        [style.opacity]="!appointment ? 0 : 1">{{ appointment?.title }}</span>
+  <span id="attendance-number" class="label-bottom" [style.opacity]="!attendances ? 0 : 1">{{ attendances?.length }}
     / {{ attendees?.length }}</span>
 </div>
 <biit-progress-bar [type]="BiitProgressBarType.DETERMINATE" [value]="(100/attendees?.length) * attendances?.length"
