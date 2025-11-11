@@ -10,7 +10,7 @@
     "build": "npm run prepare:translations && ng build --output-hashing=all --configuration docker --base-href /boarding-pass/",
     "watch": "npm run prepare:translations && ng build --watch --configuration docker",
     "clean:translations": "del-cli --force ./src/assets/i18n/biit-ui/",
-    "prepare:translations": "npm run clean:translations && cpx \"./node_modules/biit-ui/assets/i18n/**/*.json\" \"./src/assets/i18n/biit-ui/\"",
+    "prepare:translations": "npm run clean:translations && cpx \"./node_modules/@biit-solutions/wizardry-theme/assets/i18n/**/*.json\" \"./src/assets/i18n/biit-ui/\"",
     "prepare:docs": "cpx ./README.md ./dist/boarding-pass && echo \"{\\\"name\\\": \\\"`node -e \"console.log(require('./package.json').name);\"\n`\\\", \\\"version\\\": \\\"`node -e \"console.log(require('./package.json').version);\"\n`\\\"}\" > ./dist/boarding-pass/package.json",
     "prepare:publication": "npm run build && npm run prepare:docs",
     "publish": "npm run prepare:publication && npm publish --access=public ./dist/boarding-pass",
