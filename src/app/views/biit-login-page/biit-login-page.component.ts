@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BiitLogin} from "@biit-solutions/wizardry-theme/models";
 import {Constants} from "../../shared/constants";
-import {HttpResponse} from "@angular/common/http";
 import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "@biit-solutions/wizardry-theme/info";
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -9,16 +8,18 @@ import {LoginRequest, User} from "@biit-solutions/authorization-services";
 import {
   AuthService as AppointmentCenterAuthService,
   SessionService as AppointmentCenterSessionService
-} from 'appointment-center-structure-lib';
+} from '@biit-solutions/appointment-center-structure';
 import {
   AuthService as UserManagerAuthService,
+  Organization,
+  OrganizationService,
   SessionService as UserManagerSessionService,
-  OrganizationService, Organization, UserService
-} from 'user-manager-structure-lib';
+  UserService
+} from '@biit-solutions/user-manager-structure';
 import {
   AuthService as InfographicAuthService,
   SessionService as InfographicSessionService
-} from 'infographic-engine-lib';
+} from '@biit-solutions/infographic-engine-structure';
 import {combineLatest} from "rxjs";
 import {PermissionService} from "../../services/permission.service";
 import {Permission} from "../../config/rbac/permission";
@@ -31,7 +32,7 @@ import {ErrorHandler} from "@biit-solutions/wizardry-theme/utils";
   providers: [
     {
       provide: TRANSLOCO_SCOPE,
-      multi:true,
+      multi: true,
       useValue: {scope: 'components/login', alias: 'errors'}
     }
   ]
@@ -40,6 +41,7 @@ export class BiitLoginPageComponent implements OnInit {
 
   protected readonly BiitProgressBarType = BiitProgressBarType;
   protected waiting: boolean = true;
+
   constructor(private appointmentCenterAuthService: AppointmentCenterAuthService,
               private appointmentCenterSessionService: AppointmentCenterSessionService,
               private userManagerAuthService: UserManagerAuthService,
@@ -133,9 +135,9 @@ export class BiitLoginPageComponent implements OnInit {
 
   private managePathQueries(): void {
     this.activateRoute.queryParams.subscribe(params => {
-      const queryParams: {[key: string]: string} = {};
+      const queryParams: { [key: string]: string } = {};
       if (params[Constants.PATHS.QUERY.EXPIRED] !== undefined) {
-        this.translocoService.selectTranslate(Constants.PATHS.QUERY.EXPIRED, {},  {scope: 'biit-ui/utils'}).subscribe(msg => {
+        this.translocoService.selectTranslate(Constants.PATHS.QUERY.EXPIRED, {}, {scope: 'biit-ui/utils'}).subscribe(msg => {
           this.biitSnackbarService.showNotification(msg, NotificationType.INFO, null, 5);
         });
         queryParams[Constants.PATHS.QUERY.EXPIRED] = null;
@@ -144,7 +146,7 @@ export class BiitLoginPageComponent implements OnInit {
         this.appointmentCenterSessionService.clearToken();
         this.userManagerSessionService.clearToken();
         this.permissionService.clear();
-        this.translocoService.selectTranslate(Constants.PATHS.QUERY.LOGOUT, {},  {scope: 'biit-ui/utils'}).subscribe(msg => {
+        this.translocoService.selectTranslate(Constants.PATHS.QUERY.LOGOUT, {}, {scope: 'biit-ui/utils'}).subscribe(msg => {
           this.biitSnackbarService.showNotification(msg, NotificationType.SUCCESS, null, 5);
         });
         queryParams[Constants.PATHS.QUERY.LOGOUT] = null;
@@ -156,7 +158,7 @@ export class BiitLoginPageComponent implements OnInit {
   protected onResetPassword(email: string) {
     this.userService.resetPassword(email).subscribe({
       next: () => {
-        this.translocoService.selectTranslate('success', {},  {scope: 'biit-ui/login'}).subscribe(msg => {
+        this.translocoService.selectTranslate('success', {}, {scope: 'biit-ui/login'}).subscribe(msg => {
           this.biitSnackbarService.showNotification(msg, NotificationType.SUCCESS, null, 5);
         });
       },
