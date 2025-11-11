@@ -13,7 +13,7 @@
     "prepare:translations": "npm run clean:translations && cpx \"./node_modules/biit-ui/assets/i18n/**/*.json\" \"./src/assets/i18n/biit-ui/\"",
     "prepare:docs": "cpx ./README.md ./dist/boarding-pass && echo \"{\\\"name\\\": \\\"`node -e \"console.log(require('./package.json').name);\"\n`\\\", \\\"version\\\": \\\"`node -e \"console.log(require('./package.json').version);\"\n`\\\"}\" > ./dist/boarding-pass/package.json",
     "prepare:publication": "npm run build && npm run prepare:docs",
-    "publish": "npm run prepare:publication && npm publish ./dist/boarding-pass",
+    "publish": "npm run prepare:publication && npm publish --access=public ./dist/boarding-pass",
     "test": "ng test"
   },
   "dependencies": {
