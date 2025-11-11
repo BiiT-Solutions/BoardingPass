@@ -1,15 +1,15 @@
 import {AfterViewInit, Component, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
 import {NgxScannerQrcodeComponent, ScannerQRCodeResult} from "ngx-scanner-qrcode";
-import {BiitProgressBarType, BiitSnackbarService} from "biit-ui/info";
-import {Appointment, AppointmentService, Attendance, AttendanceService} from "appointment-center-structure-lib";
+import {BiitProgressBarType, BiitSnackbarService} from "@biit-solutions/wizardry-theme/info";
+import {Appointment, AppointmentService, Attendance, AttendanceService} from "@biit-solutions/appointment-center-structure";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Constants} from "../../shared/constants";
 import {combineLatest, timeout} from "rxjs";
-import {DatatableColumn} from "biit-ui/table";
-import {UserService} from "user-manager-structure-lib";
-import {User} from "authorization-services-lib";
-import {ErrorHandler} from "biit-ui/utils";
+import {DatatableColumn} from "@biit-solutions/wizardry-theme/table";
+import {UserService} from "@biit-solutions/user-manager-structure";
+import {User} from "@biit-solutions/authorization-services";
+import {ErrorHandler} from "@biit-solutions/wizardry-theme/utils";
 
 @Component({
   selector: 'scanner',

@@ -1,4 +1,4 @@
-import {Appointment, Qr} from "appointment-center-structure-lib";
+import {Appointment, Qr} from "@biit-solutions/appointment-center-structure";
 
 export class ExtendedAppointment extends Appointment {
   attended: boolean;

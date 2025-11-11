@@ -7,13 +7,13 @@ import {
   Qr,
   QrService,
   SessionService
-} from "appointment-center-structure-lib";
+} from "@biit-solutions/appointment-center-structure";
 import {combineLatest, Observable} from "rxjs";
 import {ExtendedAppointment} from "../../shared/models/extended-appointment";
-import {SvgService} from "infographic-engine-lib";
+import {SvgService} from "@biit-solutions/infographic-engine-structure";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
-import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
-import {ErrorHandler} from "biit-ui/utils";
+import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "@biit-solutions/wizardry-theme/info";
+import {ErrorHandler} from "@biit-solutions/wizardry-theme/utils";
 
 @Component({
   selector: 'schedule-viewer',

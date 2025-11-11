@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {TRANSLOCO_SCOPE, TranslocoService} from "@ngneat/transloco";
-import {Appointment, AppointmentService} from "appointment-center-structure-lib";
+import {Appointment, AppointmentService} from "@biit-solutions/appointment-center-structure";
 import {combineLatest, Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {Constants} from "../../shared/constants";
-import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "biit-ui/info";
+import {BiitProgressBarType, BiitSnackbarService, NotificationType} from "@biit-solutions/wizardry-theme/info";
 import {HttpErrorResponse} from "@angular/common/http";
 import {PermissionService} from "../../services/permission.service";
 import {Permission} from "../../config/rbac/permission";
-import {ErrorHandler} from "biit-ui/utils";
+import {ErrorHandler} from "@biit-solutions/wizardry-theme/utils";
 
 @Component({
   selector: 'schedule-viewer',
